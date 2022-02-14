@@ -1,11 +1,11 @@
-import { Login } from '@/api/acount'
+import { login, logout, userMessage } from '@/api/acount'
 import {
   getToken,
   setToken,
   removeToken,
   setLocalStorage,
   getLocalStorage,
-  removeLocalStorage
+  removeLocalStorage,
 } from '@/utils/auth'
 import { resetRouter } from '@/router'
 import defaultSettings from '@/settings'
@@ -13,87 +13,81 @@ import defaultSettings from '@/settings'
 const getDefaultState = () => {
   return {
     token: getToken(),
-    info: {
-      username: getLocalStorage('userInfo')
-        ? getLocalStorage('userInfo').username
-        : defaultSettings.userName,
-      avatar: defaultSettings.avatar
-    }
-  }
-}
+    info: getLocalStorage("userInfo")
+  };
+};
 
 const state = getDefaultState()
 const mutations = {
   // 重置State
   RESET_STATE: (state) => {
-    Object.assign(state, getDefaultState())
+    Object.assign(state, getDefaultState());
   },
   // 储存token
   SET_TOKEN: (state, token) => {
-    state.token = token
+    state.token = token;
   },
   // 储存用户信息
   SET_USERINFO: (state, userInfo) => {
-    state.info.username = userInfo
-  }
+    state.info = userInfo;
+  },
 }
 
 const actions = {
   // 登录
-  login({ commit }, userInfo) {
-    const { userName, passWord } = userInfo
-    return new Promise((resolve, reject) => {
-      Login({
-        username: userName.trim(),
-        password: passWord
-      })
-        .then((res) => {
-          const { content } = res
-          commit('SET_TOKEN', content.token)
-          commit('SET_USERINFO', content.username)
-          // Cookies存储token
-          setToken(content.token)
-          // localStorage存储 用户信息
-          setLocalStorage('userInfo', {
-            username: content.username
-          })
-          resolve()
-        })
-        .catch((error) => {
-          reject(error)
-        })
-    })
+  async Login ({ commit }, userInfo) {
+    let result = await login(userInfo)
+    if (result.code === 200) {
+      const { token } = result.data;
+      // 储存token
+      commit("SET_TOKEN", token);
+      setToken(token);
+      return token
+    } else {
+      return false
+    }
   },
 
-  // 登出
-  logout({ commit, state }) {
-    return new Promise((resolve, reject) => {
-      removeToken() // 必须先删除token
-      removeLocalStorage('userInfo') // 必须先删除userInfo
-      // resetRouter()
-      commit('RESET_STATE')
-      resolve()
-      // logout(state.token)
-      //   .then(() => {
-      //     removeToken() // 必须先删除token
-      //     resetRouter()
-      //     commit('RESET_STATE')
-      //     resolve()
-      //   })
-      //   .catch((error) => {
-      //     reject(error)
-      //   })
-    })
+  // 获取用户信息
+  async GetInfo ({ commit }, state) {
+    let result = await userMessage()
+    if (result.code === 200) {
+      // 储存用户信息
+      commit("SET_USERINFO", result.data);
+      setLocalStorage("userInfo", result.data)
+      return result.data
+    } else {
+      return Promise.reject(new Error(result.msg))
+    }
   },
 
-  // 删除 token
-  resetToken({ commit }) {
-    return new Promise((resolve) => {
+  // 退出系统
+  async LogOut ({ commit, state, dispatch }) {
+    let result = await logout(state.token)
+    if (result.code === 200) {
       removeToken() // 必须先删除token
-      commit('RESET_STATE')
-      resolve()
-    })
-  }
+      removeLocalStorage("userInfo")
+      commit('RESET_STATE', '')
+      dispatch('tagsView/delAllViews', null, { root: true })
+      return true
+    } else {
+      return Promise.reject(new Error(result.msg))
+    }
+  },
+
+  // 前端 登出
+  async FedLogOut ({ commit, dispatch }) {
+    // return new Promise((resolve) => {
+    //   removeToken(); // 必须先删除token
+    //   commit("RESET_STATE");
+    //   resolve();
+    // });
+    removeToken() // 必须先删除token
+    removeLocalStorage("userInfo")
+    commit('RESET_STATE', '')
+    dispatch('tagsView/delAllViews', null, { root: true })
+    return true
+  },
 }
 
 export default {

@@ -18,8 +18,8 @@
       <!-- 用户信息 -->
       <a-dropdown class="right-menu-item">
         <div class="avatar-wrapper cursor-pointer">
-          <img :src="avatar" alt="" class="user-avatar" />
-          <span>{{ username }}</span>
+          <img :src="photo" alt="" class="user-avatar" />
+          <span>{{ userName }}</span>
         </div>
         <!-- 用户信息弹出框 -->
         <template #overlay>

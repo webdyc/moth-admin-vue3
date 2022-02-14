@@ -9,37 +9,37 @@ module.exports = {
    * @type {String}
    * @description 系统名称
    */
-  title: 'webdyc',
+  title: "飞蛾后台管理系统",
 
   /**
    * @type {String}
    * @description 系统变量名称
    */
-  systemTitle: 'webdyc',
+  systemTitle: "moth-admin-vue",
 
   /**
    * @type {String}
    * @description 系统logo
    */
-  logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png',
+  logo: "https://webdyc.oss-cn-beijing.aliyuncs.com/moth-admin/logo.png",
 
   /**
    * @type {String}
    * @description 用户logo
    */
-  avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+  avatar: "https://avatars.githubusercontent.com/u/83387408?s=48&v=4",
 
   /**
    * @type {String}
    * @description 用户名称
    */
-  userName: 'webdyc',
+  userName: "webdyc",
 
   /**
    * @type {String} large| small | mini
    * @description 菜单栏Logo显示
    */
-  styleSize: 'small',
+  styleSize: "small",
 
   /**
    * @type {boolean} true | false
@@ -63,5 +63,5 @@ module.exports = {
    * @type {boolean} true | false
    * @description 菜单栏Logo显示
    */
-  sidebarLogo: true
+  sidebarLogo: true,
 }

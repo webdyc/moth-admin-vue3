@@ -1,78 +1,4 @@
-import axios from '../http'
-import md5 from 'blueimp-md5'
-
-/**
- * @description 获取验证码
- * @param dataForm
- * @returns {*}
- * @author webdyc
- */
-
-export function Send(options = {}) {
-  options = Object.assign(
-    {
-      // 用户名
-      username: '',
-      // 模块类型
-      type: ''
-    },
-    options
-  )
-  return axios.request({
-    url: process.env.VUE_APP_BASE_API + '/send',
-    method: 'post',
-    data: options
-  })
-}
-
-/**
- * @description 用户名检测
- * @param dataForm
- * @returns {*}
- * @author webdyc
- */
-
-export function ChekcUsername(options = {}) {
-  options = Object.assign(
-    {
-      // 用户名
-      username: ''
-    },
-    options
-  )
-  return axios.request({
-    url: process.env.VUE_APP_BASE_API + '/account/check',
-    method: 'post',
-    data: options
-  })
-}
-
-/**
- * @description 账户注册
- * @param dataForm
- * @returns {*}
- * @author webdyc
- */
-
-export function Register(options = {}) {
-  options.password = md5(options.password)
-  options = Object.assign(
-    {
-      // 用户名
-      username: '',
-      // 密码。sha1加密码
-      password: '',
-      // 手机验证码
-      code: ''
-    },
-    options
-  )
-  return axios.request({
-    url: process.env.VUE_APP_BASE_API + '/account/register',
-    method: 'post',
-    data: options
-  })
-}
+import request from "@/api/request";
 
 /**
  * @description 账户登录
@@ -81,20 +7,81 @@ export function Register(options = {}) {
  * @author webdyc
  */
 
-export function Login(options = {}) {
-  options.password = md5(options.password)
+export function login (options = {}) {
+  // const nameArray = CryptoJS.enc.Utf8.parse(options.username);
+  // options.username = CryptoJS.enc.Base64.stringify(nameArray);
+  // const wordArray = CryptoJS.enc.Utf8.parse(options.password);
+  // options.password = CryptoJS.enc.Base64.stringify(wordArray);
   options = Object.assign(
     {
       // 用户名
-      username: '',
+      username: "",
       // 密码。sha1加密码
-      password: ''
+      password: "",
+      // 验证码
+      code: "",
+      uuid: "",
     },
     options
-  )
-  return axios.request({
-    url: process.env.VUE_APP_BASE_API + '/account/login',
-    method: 'post',
-    data: options
-  })
+  );
+  return request({
+    url: process.env.VUE_APP_BASE_API + "/login",
+    method: "post",
+    data: options,
+  });
+}
+
+/**
+ * @description 获取验证码
+ * @param dataForm
+ * @returns {*}
+ * @author webdyc
+ */
+export function sendCode () {
+  return request({
+    url: process.env.VUE_APP_BASE_API + "/captchaImage",
+    method: "get",
+    // 如果后端直接返回图片流的话，放开下面的注释
+    // responseType: "blob",
+  });
+}
+
+/**
+ * @description 获取路由权限
+ * @param dataForm
+ * @returns {*}
+ * @author webdyc
+ */
+export function getRole () {
+  return request({
+    url: process.env.VUE_APP_BASE_API + "/getRouters",
+    method: "get",
+  });
+}
+
+/**
+ * @description 获取用户信息
+ * @param dataForm
+ * @returns {*}
+ * @author webdyc
+ */
+export function userMessage () {
+  return request({
+    url: process.env.VUE_APP_BASE_API + "/auth/user/myMessage",
+    method: "get",
+  });
+}
+
+/**
+ * @description 登出
+ * @param dataForm
+ * @returns {*}
+ * @author webdyc
+ */
+
+export function logout (tokenId) {
+  return request({
+    url: process.env.VUE_APP_BASE_API + "/monitor/online/" + tokenId,
+    method: "get",
+  });
 }
