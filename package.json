@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@tinymce/tinymce-vue": "^4.0.5",
-    "ant-design-vue": "^2.2.8",
+    "ant-design-vue": "^3.2.10",
     "axios": "^0.24.0",
     "blueimp-md5": "^2.19.0",
     "core-js": "^3.6.5",
