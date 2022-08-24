@@ -36,10 +36,10 @@ module.exports = {
   userName: "webdyc",
 
   /**
-   * @type {String} large| small | mini
+   * @type {String} large| mini | small
    * @description 菜单栏Logo显示
    */
-  styleSize: "large",
+  styleSize: "mini",
 
   /**
    * @type {boolean} true | false

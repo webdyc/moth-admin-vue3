@@ -1,6 +1,6 @@
 import request from "@/api/request";
-// 右边tabel数据
-export function organization_tabel(options = {}) {
+// 列表
+export function organization_list (options = {}) {
   options = Object.assign(
     {
       parentIds: "",
@@ -23,7 +23,7 @@ export function organization_tabel(options = {}) {
 
 // 左边树数据
 
-export function organization_treeselect(options = {}) {
+export function organization_treeselect (options = {}) {
   return request({
     url: process.env.VUE_APP_BASE_API + "/unioncast/office/treeselect",
     method: "get",
@@ -31,7 +31,7 @@ export function organization_treeselect(options = {}) {
   });
 }
 // 修改组织状态
-export function organization_stateChange(options = {}) {
+export function organization_stateChange (options = {}) {
   return request({
     url: process.env.VUE_APP_BASE_API + "/unioncast/office/edit",
     method: "post",
@@ -39,7 +39,7 @@ export function organization_stateChange(options = {}) {
   });
 }
 // 新增组织
-export function organization_add(options = {}) {
+export function organization_add (options = {}) {
   return request({
     url: process.env.VUE_APP_BASE_API + "/unioncast/office/add",
     method: "post",
@@ -48,7 +48,7 @@ export function organization_add(options = {}) {
 }
 // 删除组织
 
-export function organization_remove(options = {}) {
+export function organization_delete (options = {}) {
   return request({
     url:
       process.env.VUE_APP_BASE_API + `/unioncast/office/delete/${options.id}`,
@@ -57,7 +57,7 @@ export function organization_remove(options = {}) {
 }
 // 编辑组织
 
-export function organization_edit(options = {}) {
+export function organization_edit (options = {}) {
   return request({
     url: process.env.VUE_APP_BASE_API + "/unioncast/office/edit",
     method: "post",
@@ -65,46 +65,8 @@ export function organization_edit(options = {}) {
   });
 }
 // 查看组织
-
-export function organization_detail(options = {}) {
+export function organization_detail (options = {}) {
   return request({
     url: process.env.VUE_APP_BASE_API + `/unioncast/office/id/${options}`,
-  });
-}
-
-// // 点击组织树列表根据ID查询所有组织
-
-// export function organization_getTerr(options = {}) {
-//   return request({
-//     url: process.env.VUE_APP_BASE_API + "/unioncast/office/treeselect",
-//     method: "get",
-//     params: options,
-//   });
-// }
-
-// 附加信息
-
-export function addInfo(options = {}) {
-  return request({
-    url: process.env.VUE_APP_BASE_API + "/officePeculiar/edit",
-    method: "post",
-    data: options,
-  });
-}
-
-// 组织附加信息详情
-export function officePeculiar(options = {}) {
-  return request({
-    url: process.env.VUE_APP_BASE_API + "/officePeculiar/detail",
-    method: "post",
-    data: options,
-  });
-}
-// //app创建应用接口
-export function semantic(options) {
-  return request({
-    url: process.env.VUE_APP_BASE_API + "/semantic/system/applications",
-    method: "post",
-    data: options,
   });
 }

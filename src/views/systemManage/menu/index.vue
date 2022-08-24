@@ -30,8 +30,10 @@
           <span v-else-if="record.menuType === 'F'">按钮</span>
         </template>
         <template v-if="column.dataIndex === 'action'">
-          <a class="mr-1" @click="handleAdd(record)">新增</a>
-          <a class="mr-1" @click="handleEdit(record)">编辑</a>
+          <a @click="handleAdd(record)">新增</a>
+          <a-divider type="vertical" />
+          <a @click="handleEdit(record)">编辑</a>
+          <a-divider type="vertical" />
           <a-popconfirm
             title="是否要删除?"
             cancel-text="取消"

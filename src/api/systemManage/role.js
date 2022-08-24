@@ -1,7 +1,22 @@
 import request from "@/api/request";
 
-// 获取列表
+// 根据组织id查询角色
+export function user_roleMap (options = {}) {
+  options = Object.assign(
+    {
+      // 组织id
+      id: "",
+    },
+    options
+  );
+  return request({
+    url: process.env.VUE_APP_BASE_API + "/auth/role/roleMap",
+    method: "get",
+    params: options,
+  });
+}
 
+// 获取列表
 export function role_list (options = {}) {
   options = Object.assign(
     {
@@ -120,10 +135,4 @@ export function role_add (options = {}) {
   });
 }
 
-export function treeselectrole (options) {
-  return request({
-    url: process.env.VUE_APP_BASE_API + "/menu/treeselectrole",
-    method: "get",
-    data: options,
-  });
-}
+

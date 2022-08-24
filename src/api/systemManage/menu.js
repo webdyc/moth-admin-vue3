@@ -13,7 +13,13 @@ export function menu_treeselect () {
         method: "get",
     });
 }
-
+export function menu_treeselectrole (options) {
+    return request({
+        url: process.env.VUE_APP_BASE_API + "/menu/treeselectrole",
+        method: "get",
+        data: options,
+    });
+}
 /**
  * @description 菜单 —— 列表查询
  * @param dataForm

@@ -2,7 +2,7 @@ import request from "@/api/request";
 
 // 查询用户列表
 
-export function user_searchUserList(options = {}) {
+export function user_list (options = {}) {
   return request({
     url: process.env.VUE_APP_BASE_API + "/auth/user/list",
     method: "get",
@@ -12,7 +12,7 @@ export function user_searchUserList(options = {}) {
 
 // 修改用户状态
 
-export function user_stateChange(options = {}) {
+export function user_stateChange (options = {}) {
   options = Object.assign(
     {
       // 修改的id
@@ -29,7 +29,7 @@ export function user_stateChange(options = {}) {
   });
 }
 
-export function user_detail(options = {}) {
+export function user_detail (options = {}) {
   options = Object.assign(
     {
       id: "",
@@ -42,7 +42,7 @@ export function user_detail(options = {}) {
   });
 }
 
-export function user_add(options = {}) {
+export function user_add (options = {}) {
   // options = Object.assign(
   //   {
   //     // 用户名
@@ -68,23 +68,9 @@ export function user_add(options = {}) {
     data: options,
   });
 }
-// 根据组织id查询角色
-export function user_roleMap(options = {}) {
-  options = Object.assign(
-    {
-      // 组织id
-      id: "",
-    },
-    options
-  );
-  return request({
-    url: process.env.VUE_APP_BASE_API + "/auth/role/roleMap",
-    method: "get",
-    params: options,
-  });
-}
+
 // 根据用户id删除
-export function user_delete(options = {}) {
+export function user_delete (options = {}) {
   // options ==id
   return request({
     url: process.env.VUE_APP_BASE_API + `/auth/user/delete/${options}`,
@@ -92,7 +78,7 @@ export function user_delete(options = {}) {
   });
 }
 
-export function user_edit(options = {}) {
+export function user_edit (options = {}) {
   options = Object.assign(
     {
       // 用户名
@@ -121,7 +107,7 @@ export function user_edit(options = {}) {
   });
 }
 
-export function user_transfer(options = {}) {
+export function user_transfer (options = {}) {
   options = Object.assign(
     {
       // 用户住建
@@ -143,7 +129,7 @@ export function user_transfer(options = {}) {
 }
 
 // 个人中心编辑
-export function editCurrentUser(options = {}) {
+export function editCurrentUser (options = {}) {
   return request({
     url: process.env.VUE_APP_BASE_API + "/auth/user/editCurrentUser",
     method: "post",
