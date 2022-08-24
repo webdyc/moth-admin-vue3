@@ -10,7 +10,12 @@ module.exports = {
     tinymce: '富文本编译器',
     dragDalog: '可拖拽弹窗',
     permission: '权限指令',
-    about: '关于'
+    about: '关于',
+    systemManage: '系统管理',
+    organization: '组织管理',
+    agendaManage: '日程管理',
+    agenda: '日程',
+    agendaGrid: '日程组',
   },
   // 头部菜单
   header_menu: {

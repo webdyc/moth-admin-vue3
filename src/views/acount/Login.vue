@@ -66,7 +66,13 @@
           </a-input-group>
         </a-form-item>
         <a-form-item>
-          <a-button type="primary" html-type="submit" block size="large">
+          <a-button
+            type="primary"
+            html-type="submit"
+            block
+            size="large"
+            :loading="loading"
+          >
             立即登录</a-button
           >
         </a-form-item>
@@ -97,9 +103,9 @@ class PersonForm {
     // 客户姓名
     this.username = 'admin'
     // 客户号码
-    this.password = 'admin123'
-    // 备用号码
-    this.code = ''
+    this.password = '123456'
+    // 验证码
+    this.code = 'gstd'
     // 客户来源
     this.uuid = ''
   }
@@ -125,6 +131,7 @@ export default {
     const state = reactive({
       title: defaultSettings.title,
       codeUrl: '',
+      loading: false,
       dataFrom: new PersonForm(),
       // 表单验证
       dataFromRules: PersonForm.getRule()
@@ -143,13 +150,22 @@ export default {
     }
     // 表单提交
     const handleFinish = async (values) => {
-      let token = await store.dispatch('user/Login', state.dataFrom)
-      let myMessage = await store.dispatch('user/GetInfo', token)
-      if (token && myMessage) {
-        // router.replace({ path: this.redirect || '/' })
-        router.replace({ path: '/' })
-      } else {
+      state.loading = true
+      try {
+        let token = await store.dispatch('user/Login', state.dataFrom)
+        let myMessage = await store.dispatch('user/GetInfo', token)
+        console.log(token, myMessage)
+        if (token && myMessage) {
+          console.log(router)
+          router.push({ path: '/' })
+          state.loading = false
+        } else {
+          state.getCode()
+          state.loading = false
+        }
+      } catch (error) {
         getCode()
+        state.loading = false
       }
     }
     return {

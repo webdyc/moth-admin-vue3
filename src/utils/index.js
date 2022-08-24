@@ -1,3 +1,5 @@
+import CryptoJS from "crypto-js";
+
 /**
  * 检测是否为纯粹的对象
  * @param {*} value 手机号
@@ -149,13 +151,15 @@ export const equalsObject = function equalsObject (object1, object2) {
  *  value: 值
  *  valueName: "value"  需要遍历数组的字段名
  *  childrenName: "children" 需要遍历数组的嵌套子级名
- * } 
+ * }
  * @author webdyc
  */
-export const findPatentValue = function findPatentValue (array,
+export const findPatentValue = function findPatentValue (
+  array,
   value,
   valueName = "value",
-  childrenName = "children") {
+  childrenName = "children"
+) {
   if (!value || !Array.isArray(array)) return [];
   const result = [];
   let valid = false;
@@ -487,4 +491,35 @@ export function removeClass (ele, cls) {
     const reg = new RegExp("(\\s|^)" + cls + "(\\s|$)");
     ele.className = ele.className.replace(reg, " ");
   }
+}
+
+//拉平数据对象
+export function steamroller (arr) {
+  var newArr = [];
+  arr.forEach((element) => {
+    newArr.push(element);
+    if (element.children) {
+      newArr.push.apply(newArr, steamroller(element.children));
+      delete element.children;
+    } else {
+    }
+  });
+
+  return newArr;
+}
+
+/**
+ * 加密密码
+ * @param {*} word 需要加密的值
+ * @param {*} keyStr 加密规则
+ */
+export function encrypt (word, keyStr) {
+  keyStr = keyStr ? keyStr : "gsTd20221S**=YJU"; //判断是否存在ksy，不存在就用定义好的key
+  var key = CryptoJS.enc.Utf8.parse(keyStr);
+  var srcs = CryptoJS.enc.Utf8.parse(word);
+  var encrypted = CryptoJS.AES.encrypt(srcs, key, {
+    mode: CryptoJS.mode.ECB,
+    padding: CryptoJS.pad.Pkcs7,
+  });
+  return encrypted.toString();
 }

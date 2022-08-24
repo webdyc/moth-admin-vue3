@@ -53,9 +53,9 @@ const actions = {
     let result = await userMessage()
     if (result.code === 200) {
       // 储存用户信息
-      commit("SET_USERINFO", result.data);
-      setLocalStorage("userInfo", result.data)
-      return result.data
+      commit("SET_USERINFO", result.user);
+      setLocalStorage("userInfo", result.user)
+      return result.user
     } else {
       return Promise.reject(new Error(result.msg))
     }

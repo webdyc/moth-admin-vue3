@@ -13,14 +13,18 @@
       <template v-for="item in menu.children">
         <template v-if="!item.hidden">
           <!-- 不存在子级的栏目 -->
-          <a-menu-item v-if="!item.children" :key="item.path">
-            <router-link :to="item.path">{{
+          <a-menu-item v-if="!item.children" :key="resolvePath(item.path)">
+            <router-link :to="resolvePath(item.path)">{{
               item.meta && $t(`aside_menu.${item.meta.langTitle}`)
             }}</router-link>
           </a-menu-item>
           <!-- 存在子级栏目 -->
           <template v-else>
-            <SidebarItem :key="item.path" :menu="item" />
+            <SidebarItem
+              :key="item.path"
+              :menu="item"
+              :base-path="resolvePath(item.path)"
+            />
           </template>
         </template>
       </template>
@@ -28,6 +32,9 @@
   </a-sub-menu>
 </template>
 <script>
+import path from 'path'
+import { isExternal } from '@/utils/validate'
+
 export default {
   name: 'SidebarItem',
   components: {},
@@ -35,9 +42,28 @@ export default {
     menu: {
       type: Object, // array
       default: () => ({})
+    },
+    // 父级路径
+    basePath: {
+      type: String,
+      default: ''
     }
   },
-  setup() {}
+  setup(props) {
+    // 路由跳转添加父级路径
+    const resolvePath = (routePath) => {
+      if (isExternal(routePath)) {
+        return routePath
+      }
+      if (isExternal(props.basePath)) {
+        return props.basePath
+      }
+      return path.resolve(props.basePath, routePath)
+    }
+    return {
+      resolvePath
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>

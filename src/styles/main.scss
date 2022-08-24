@@ -57,6 +57,66 @@
         text-align: right;
     }
 }
+// 普通页面样式
+.app-box {
+    // margin: 24px 16px;
+    // 左右结构表格样式
+    .app-box-table {
+      display: flex;
+      .box-card {
+        width: 20%;
+        margin-right: 15px;
+      }
+      .app-box-table-box {
+        width: 79%;
+        background: #ffffff;
+        // flex: 1;
+        padding: 20px;
+        // 搜索项
+        .search-form {
+          margin-bottom: 5px;
+          .ant-form-item {
+            margin-bottom: 15px;
+            .ant-select-single,
+            input {
+              width: 200px;
+            }
+            .ant-btn {
+              margin-right: 8px;
+            }
+          }
+        }
+        // 表格配置
+        .table-config {
+          margin-bottom: 15px;
+        }
+        // 分页
+        .table-pagination {
+          margin-top: 15px;
+          text-align: right;
+        }
+      }
+    }
+  }
+  
+  // 详情页面样式
+  .app-info {
+    .app-info-top {
+      background: #ffffff;
+      padding: 15px;
+    }
+    .app-info-content {
+      margin: 24px 16px;
+      background: #ffffff;
+      padding: 20px;
+      .app-info-content-item {
+        margin-bottom: 20px;
+        .app-info-content-item-title {
+          margin-bottom: 15px;
+        }
+      }
+    }
+  }
 // 弹出框样式
 .table-modal{
     // 弹出框标题增加蓝色伪类样式

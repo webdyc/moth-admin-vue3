@@ -1,4 +1,5 @@
 import request from "@/api/request";
+import { encrypt, deepClone } from "@/utils/index";
 
 /**
  * @description 账户登录
@@ -8,10 +9,6 @@ import request from "@/api/request";
  */
 
 export function login (options = {}) {
-  // const nameArray = CryptoJS.enc.Utf8.parse(options.username);
-  // options.username = CryptoJS.enc.Base64.stringify(nameArray);
-  // const wordArray = CryptoJS.enc.Utf8.parse(options.password);
-  // options.password = CryptoJS.enc.Base64.stringify(wordArray);
   options = Object.assign(
     {
       // 用户名
@@ -24,10 +21,13 @@ export function login (options = {}) {
     },
     options
   );
+  let data = deepClone(options)
+  data.password = encrypt(data.password);
+
   return request({
     url: process.env.VUE_APP_BASE_API + "/login",
     method: "post",
-    data: options,
+    data: data,
   });
 }
 
@@ -67,7 +67,7 @@ export function getRole () {
  */
 export function userMessage () {
   return request({
-    url: process.env.VUE_APP_BASE_API + "/auth/user/myMessage",
+    url: process.env.VUE_APP_BASE_API + "/getInfo",
     method: "get",
   });
 }

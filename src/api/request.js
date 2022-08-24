@@ -60,8 +60,8 @@ service.interceptors.response.use(
         Modal.warning({
           title: '登出通知',
           content: '您已经被登出, 请重新登录~',
-          onOk () {
-            store.dispatch('user/FedLogOut')
+          async onOk () {
+            let result = await store.dispatch('user/FedLogOut')
             // 这个系统再切换用户时，路由不会动态更新。所以需要在登出函数中加上location.reload();刷新浏览器。
             if (result) {
               location.reload();

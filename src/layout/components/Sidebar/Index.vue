@@ -15,12 +15,12 @@
         <!--这里是一级-->
         <a-menu-item v-if="hasOnlyChildren(item)" :key="item.path">
           <router-link :to="item.path">
-            <span class="anticon">
+            <!-- <span class="anticon">
               <svg-icon
                 :icon-name="item.meta && item.meta.icon"
                 class-name="aside-svg"
               />
-            </span>
+            </span> -->
             <span>
               {{ item.meta && $t(`aside_menu.${item.meta.langTitle}`) }}</span
             >
@@ -28,7 +28,7 @@
         </a-menu-item>
         <!--这里是子级-->
         <template v-else>
-          <SidebarItem :key="item.path" :menu="item" />
+          <SidebarItem :key="item.path" :menu="item" :base-path="item.path" />
         </template>
       </template>
     </template>

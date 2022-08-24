@@ -32,11 +32,12 @@ router.beforeEach(async (to, from, next) => {
       if (!asyncRouterFlag) {
         asyncRouterFlag++
         // 通过用户角色，获取到角色路由表
-        //   const { code, data } = await getRole()
+        // const { code, data } = await getRole()
+        // const dataList = data
         //   console.log('路由表', code, data)
         // 本地数据
         const dataList = menuListM
-        //   const dataList = data
+
         //   格式化路由结构
         const accessRoutes = getAsyncRoutes(dataList)
         //   存到vuex中，菜单栏需要

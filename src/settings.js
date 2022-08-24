@@ -15,7 +15,7 @@ module.exports = {
    * @type {String}
    * @description 系统变量名称
    */
-  systemTitle: "moth-admin-vue",
+  systemTitle: "moth-admin-vue3",
 
   /**
    * @type {String}
@@ -39,7 +39,7 @@ module.exports = {
    * @type {String} large| small | mini
    * @description 菜单栏Logo显示
    */
-  styleSize: "small",
+  styleSize: "large",
 
   /**
    * @type {boolean} true | false

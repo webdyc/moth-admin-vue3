@@ -1,80 +1,176 @@
 <template>
-  <!-- 导航栏 -->
-  <div class="navbar">
-    <div class="left-menu flex align-center">
-      <!-- 菜单折叠按钮 -->
-      <div class="menu-unfold-outlined">
-        <menu-unfold-outlined
-          v-if="collapsed"
-          class="trigger"
-          @click="toggleSideBar"
-        />
-        <menu-fold-outlined v-else class="trigger" @click="toggleSideBar" />
-      </div>
-      <!-- 面包屑 -->
-      <Breadcrumb class="breadcrumb-container ml-2"></Breadcrumb>
-    </div>
-    <div class="right-menu flex">
-      <!-- 用户信息 -->
-      <a-dropdown class="right-menu-item">
-        <div class="avatar-wrapper cursor-pointer">
-          <img :src="photo" alt="" class="user-avatar" />
-          <span>{{ userName }}</span>
-        </div>
-        <!-- 用户信息弹出框 -->
-        <template #overlay>
-          <a-menu>
-            <a-menu-item key="0">
-              <router-link to="/"> 回到主页 </router-link>
-            </a-menu-item>
-            <a-menu-item key="1">
-              <a
-                target="_blank"
-                href="https://github.com/webdyc/vue3-antd-admin"
-              >
-                Github
-              </a>
-            </a-menu-item>
-            <a-menu-item key="3">
-              <a target="_blank" href="https://webdyc.com/"> 博客地址 </a>
-            </a-menu-item>
-            <a-menu-divider />
-            <a-menu-item key="4" @click="logout">
-              <div>退出登录</div>
-            </a-menu-item>
-          </a-menu>
+  <div class="app-content">
+    <!-- 表格配置 -->
+    <div class="table-config">
+      <a-button type="primary" @click="handleAdd">
+        <template #icon>
+          <PlusOutlined />
         </template>
-      </a-dropdown>
-      <!-- 国际化 -->
-      <a-dropdown class="right-menu-item" :trigger="['click']">
-        <div class="avatar-wrapper cursor-pointer">
-          <svg-icon :icon-name="'international'" class-name="navbar-svg" />
-        </div>
-        <!-- 用户信息弹出框 -->
-        <template #overlay>
-          <a-menu class="right-menu-item-lang">
-            <a-menu-item
-              v-for="(item, index) in lang"
-              :key="index"
-              @click="toggleLang(item.value)"
+        新增一级菜单
+      </a-button>
+    </div>
+    <!-- 表格内容 -->
+    <a-table
+      :columns="tableColumns"
+      :dataSource="tableData"
+      :loading="tableLoading"
+      bordered
+      class="components-table-demo-nested"
+    >
+      <template v-slot:bodyCell="{ column, record }">
+        <template v-if="column.dataIndex === 'keepAlive'">
+          {{ record.keepAlive ? '是' : '否' }}
+        </template>
+        <template v-if="column.dataIndex === 'hidden'">
+          {{ record.hidden ? '是' : '否' }}
+        </template>
+        <template v-if="column.dataIndex === 'menuType'">
+          <span v-if="record.menuType === 'M'">目录</span>
+          <span v-else-if="record.menuType === 'C'">菜单</span>
+          <span v-else-if="record.menuType === 'F'">按钮</span>
+        </template>
+        <template v-if="column.dataIndex === 'action'">
+          <a class="mr-1" @click="handleAdd(record)">新增</a>
+          <a class="mr-1" @click="handleEdit(record)">编辑</a>
+          <a-popconfirm
+            title="是否要删除?"
+            cancel-text="取消"
+            ok-text="确定"
+            @confirm="handleDelete(record.id)"
+          >
+            <a>删除</a>
+          </a-popconfirm>
+        </template>
+      </template>
+    </a-table>
+    <!-- 新增/编辑弹出框 -->
+    <a-modal
+      class="table-modal"
+      width="50%"
+      v-model:visible="updateFormVisible"
+      :title="isUpdate ? '编辑菜单' : '添加菜单'"
+      :confirm-loading="updateFormLoading"
+      :afterClose="closeForm"
+      @ok="handleSubmit"
+    >
+      <div class="table-modal-content" v-ant-drag-dialog>
+        <a-form :model="updateForm" v-bind="updateFormLayout">
+          <a-row>
+            <a-form-item label="上级菜单：">
+              <a-cascader
+                class="w200"
+                v-model:value="menuTreeselectId"
+                :options="menuTreeselectArr"
+                :field-names="{
+                  children: 'children',
+                  label: 'label',
+                  value: 'id'
+                }"
+              />
+            </a-form-item>
+          </a-row>
+          <a-row>
+            <a-form-item label="菜单类型：">
+              <a-radio-group v-model:value="updateForm.menuType">
+                <a-radio value="M">目录</a-radio>
+                <a-radio value="C">菜单</a-radio>
+                <a-radio value="F">按钮</a-radio>
+              </a-radio-group>
+            </a-form-item>
+          </a-row>
+          <div class="from-inline">
+            <a-form-item label="菜单名称：">
+              <a-input
+                v-model:value="updateForm.title"
+                placeholder="title"
+                :size="styleSize"
+              />
+            </a-form-item>
+            <template
+              v-if="updateForm.menuType === 'M' || updateForm.menuType === 'C'"
             >
-              <div class="align-center flex">
-                <svg-icon :icon-name="item.name" class-name="language-svg" />
-                <div :class="{ current: lang_current == item.value }">
-                  {{ item.label }}
-                </div>
-              </div>
-            </a-menu-item>
-          </a-menu>
-        </template>
-      </a-dropdown>
-    </div>
+              <a-form-item label="路由名称：">
+                <a-input
+                  v-model:value="updateForm.name"
+                  placeholder="name"
+                  :size="styleSize"
+                />
+              </a-form-item>
+              <a-form-item label="路由地址：">
+                <a-input
+                  v-model:value="updateForm.path"
+                  placeholder="path"
+                  :size="styleSize"
+                />
+              </a-form-item>
+              <a-form-item label="文件路径：">
+                <a-input
+                  v-model:value="updateForm.component"
+                  placeholder="component"
+                  :size="styleSize"
+                />
+              </a-form-item>
+              <a-form-item
+                label="路由重定向："
+                v-if="updateForm.menuType === 'M'"
+              >
+                <a-input
+                  v-model:value="updateForm.redirect"
+                  placeholder="redirect"
+                  :size="styleSize"
+                />
+              </a-form-item>
+              <a-form-item label="图标：" v-if="updateForm.menuType === 'M'">
+                <a-input
+                  v-model:value="updateForm.icon"
+                  placeholder="icon"
+                  :size="styleSize"
+                />
+              </a-form-item>
+              <a-form-item
+                label="面包屑显示："
+                v-if="updateForm.menuType === 'C'"
+              >
+                <a-switch v-model:checked="updateForm.breadcrumb" />
+              </a-form-item>
+              <a-form-item
+                label="是否缓存："
+                v-if="updateForm.menuType === 'C'"
+              >
+                <a-switch v-model:checked="updateForm.keepAlive" />
+              </a-form-item>
+              <a-form-item label="隐藏路由：">
+                <a-switch v-model:checked="updateForm.hidden" />
+              </a-form-item>
+            </template>
+
+            <a-form-item label="按钮权限：" v-if="updateForm.menuType === 'F'">
+              <a-input
+                v-model:value="updateForm.role"
+                placeholder="role"
+                :size="styleSize"
+              />
+            </a-form-item>
+            <a-form-item label="排序：">
+              <a-input
+                v-model:value="updateForm.sort"
+                placeholder="sort"
+                :size="styleSize"
+              />
+            </a-form-item>
+          </div>
+        </a-form>
+      </div>
+    </a-modal>
   </div>
 </template>
 <script>
-import { computed, reactive, toRefs } from '@vue/reactivity'
-import { useStore } from 'vuex'
+import defaultSettings from '@/settings'
+import { reactive, toRefs } from '@vue/reactivity'
+import { PlusOutlined } from '@ant-design/icons-vue'
 import { onBeforeMount } from '@vue/runtime-core'
+import { message } from 'ant-design-vue'
+import { deepClone, findPatentValue } from '@/utils'
 import {
   menu_treeselect,
   menu_list,
@@ -84,186 +180,70 @@ import {
   menu_update
 } from '@/api/systemManage/menu'
 
-// 路由表
-const menuListM = [
+const columns = [
   {
-    id: 1,
-    path: '/',
-    component: 'Layout',
-    redirect: 'welcome',
-    children: [
-      {
-        id: 11,
-        path: 'welcome',
-        name: 'Welcome',
-        component: '/welcome/index',
-        meta: {
-          title: '欢迎首页',
-          role: ['admin', 'addbtn1'],
-          icon: 'example'
-        }
-      }
-    ]
+    title: '路由地址',
+    dataIndex: 'path',
+    key: 'path'
   },
   {
-    id: 2,
-    path: '/user',
-    component: 'Layout',
-    redirect: '/user/index',
-    children: [
-      {
-        id: 21,
-        path: '/user/index',
-        name: 'user',
-        component: '/user/index',
-        meta: {
-          title: '用户管理',
-          icon: 'table'
-        }
-      }
-    ]
+    title: '标题',
+    dataIndex: 'title',
+    key: 'title',
+    align: 'center'
   },
   {
-    id: 3,
-    path: '/charts',
-    component: 'Layout',
-    redirect: '/charts/index',
-    meta: {
-      title: '图表管理',
-      icon: 'table'
-    },
-    children: [
-      {
-        id: 31,
-        path: '/charts/index',
-        name: 'chartsline',
-        component: '/charts/line/index',
-        meta: {
-          title: '折线图'
-        }
-      },
-      {
-        id: 32,
-        path: '/charts/mixChart',
-        name: 'chartsmixChart',
-        component: '/charts/mixChart/index',
-        meta: {
-          title: '混合图表'
-        }
-      }
-    ]
+    title: '路由名称',
+    dataIndex: 'name',
+    key: 'name',
+    align: 'center'
   },
   {
-    id: 4,
-    path: '/components',
-    component: 'Layout',
-    redirect: '/tinymce/index',
-    meta: {
-      title: '组件',
-      icon: 'table'
-    },
-    children: [
-      {
-        id: 41,
-        path: '/recorder/index',
-        name: 'recorder',
-        component: '/components/recorder/index',
-        meta: {
-          title: '录音'
-        }
-      },
-      {
-        id: 42,
-        path: '/tinymce/index',
-        name: 'tinymce',
-        component: '/components/tinymce/index',
-        meta: {
-          title: '富文本编译器'
-        }
-      },
-      {
-        id: 43,
-        path: '/componentsDemo/index',
-        name: 'componentsDemo',
-        component: '/components/componentsDemo/index',
-        meta: {
-          title: '小组件'
-        }
-      },
-      {
-        id: 44,
-        path: '/dragDalog/index',
-        name: 'dragDalog',
-        component: '/components/dragDalog/index',
-        meta: {
-          title: '可拖拽弹窗'
-        }
-      },
-      {
-        id: 45,
-        path: '/dragKanban/index',
-        name: 'dragKanban',
-        component: '/components/dragKanban/index',
-        meta: {
-          title: '可拖拽看板'
-        }
-      }
-    ]
+    title: '文件路径',
+    key: 'component',
+    dataIndex: 'component',
+    align: 'center'
   },
   {
-    id: 5,
-    path: '/permission',
-    component: 'Layout',
-    redirect: '/permission/index',
-    children: [
-      {
-        id: 51,
-        path: '/permission/index',
-        name: 'permission',
-        component: '/permission/index',
-        meta: {
-          title: '指令权限',
-          icon: 'table'
-        }
-      }
-    ]
+    title: '路由重定向',
+    key: 'redirect',
+    dataIndex: 'redirect',
+    align: 'center'
   },
   {
-    id: 6,
-    path: '/menu',
-    component: 'Layout',
-    redirect: '/menu/index',
-    children: [
-      {
-        id: 61,
-        path: '/menu/index',
-        name: 'menu',
-        component: '/menu/index',
-        meta: {
-          title: '菜单管理',
-          icon: 'table'
-        }
-      }
-    ]
+    title: '图标',
+    key: 'icon',
+    dataIndex: 'icon',
+    align: 'center'
+  },
+  {
+    title: '是否缓存',
+    key: 'keepAlive',
+    dataIndex: 'keepAlive',
+    align: 'center'
+  },
+  {
+    title: '隐藏路由',
+    key: 'hidden',
+    dataIndex: 'hidden',
+    align: 'center'
+  },
+  {
+    title: '菜单类型',
+    key: 'menuType',
+    dataIndex: 'menuType',
+    align: 'center'
+  },
+  {
+    title: '操作',
+    key: 'action',
+    dataIndex: 'action',
+    align: 'center',
+    fixed: 'right',
+    width: 200
   }
 ]
 
-/**
-* parentId: null              上级菜单
-* menuType: M,                菜单类型
-* sort: 1,                    排序
-* hidden: true,               是否隐藏路由
-* path: '/welcome',           路由地址
-* component:'Layout',         vue文件路径
-* redirect: noredirect,       路由重定向
-* name:'welcome',             路由名称父级可不填
-* 单层级路由父级可不填
-  role: 'admin',               页面权限
-  title: 'title'               页面标题
-  icon: 'svg-name'             页面图标
-  breadcrumb: false,           如果设置为false，则不会在breadcrumb面包屑中显示(默认 true)
-  keepAlive: false,            页面是否缓存
-**/
 // PersonForm的类
 class PersonForm {
   // 值
@@ -304,19 +284,26 @@ class PersonForm {
     }
   }
 }
-
 export default {
   name: 'Menu',
-  components: {},
+  components: { PlusOutlined },
   setup() {
-    const store = useStore()
     const state = reactive({
+      styleSize: defaultSettings.styleSize,
       // 搜索项
       searchForm: {
+        // 用户名
+        username: '',
+        // 手机号
+        phone: '',
+        // 真实姓名
+        truename: '',
         // 每页条数
         pageSize: 10,
         // 当前页码
-        pageNum: 1
+        pageNum: 1,
+        // 禁启用（true：启用，false：禁用）
+        status: ''
       },
       // 菜单下拉树数组
       menuTreeselectId: [],
@@ -339,9 +326,10 @@ export default {
         checkStrictly: true
       },
       // 表格数据
-      formLabelWidth: '140px',
+      tableData: [],
       tableLoading: false,
-      tableData: menuListM,
+      // 表头数据
+      tableColumns: columns,
       // 总条数
       total: 0,
       // 表单弹出框
@@ -349,16 +337,18 @@ export default {
       updateFormVisible: false,
       updateFormLoading: false,
       updateForm: new PersonForm(),
-      updateFormRules: PersonForm.getRule()
+      updateFormRules: PersonForm.getRule(),
+      // 弹出框表单宽度参数
+      updateFormLayout: {
+        labelCol: { style: { width: '140px' } },
+        wrapperCol: { span: 18 }
+      }
     })
     // 获取列表
     onBeforeMount(async () => {
       handleSearch()
     })
-    // 获取菜单展开收起状态
-    const collapsed = computed(() => {
-      return store.getters.sidebar.opened
-    })
+
     // 获取菜单下拉树列表
     const getMenuTreeselect = async () => {
       state.menuTreeselectArr = await menu_treeselect().then((res) => res.data)
@@ -368,15 +358,104 @@ export default {
       state.tableLoading = true
       let { code, data, total } = await menu_list(state.searchForm)
       if (code === 200) {
-        state.tableData = data
+        state.tableData = data.map((item, index) => {
+          // 不加key会导致点击展开全部
+          item.key = index
+          return item
+        })
         state.total = total
         state.tableLoading = false
       }
     }
+    // 打开新增弹框
+    const handleAdd = async (row) => {
+      // 获取菜单下拉树列表
+      await getMenuTreeselect()
+      if (row) {
+        state.menuTreeselectId = findPatentValue(
+          state.menuTreeselectArr,
+          row.id,
+          'id'
+        )
+      }
+      state.updateFormVisible = true
+    }
+    // 打开编辑弹框
+    const handleEdit = async (row) => {
+      // 获取菜单下拉树列表
+      await getMenuTreeselect()
+      let { code, data } = await menu_info(row.id)
+      if (code === 200) {
+        state.updateForm = data
+        // 编辑
+        state.isUpdate = true
+        // 处理下拉框树结构
+        state.menuTreeselectId = findPatentValue(
+          state.menuTreeselectArr,
+          state.updateForm.parentId,
+          'id'
+        )
+      }
+      state.updateFormVisible = true
+    }
+    // 弹窗表单提交
+    const handleSubmit = async () => {
+      state.updateFormLoading = true
+      let params = deepClone(state.updateForm)
+      params.parentId =
+        state.menuTreeselectId[state.menuTreeselectId.length - 1]
+      if (state.isUpdate) {
+        //编辑
+        let result = await menu_update(params)
+        if (result.code === 200) {
+          closeForm()
+          handleSearch()
+        } else {
+          message.warning(res.msg)
+        }
+      } else {
+        let result = await menu_create(params)
+        if (result.code === 200) {
+          closeForm()
+          handleSearch()
+        } else {
+          state.updateFormLoading = false
+        }
+      }
+    }
+    // 关闭弹窗
+    const closeForm = () => {
+      state.updateForm = new PersonForm()
+      state.updateFormRules = PersonForm.getRule()
+      state.updateFormLoading = false
+      state.updateFormVisible = false
+    }
+    // 删除
+    const handleDelete = async (id) => {
+      let { code } = await menu_remove(id)
+      if (code === 200) {
+        handleSearch()
+        message.success('删除成功')
+      }
+    }
     return {
-      ...toRefs(state)
+      ...toRefs(state),
+      handleSearch,
+      handleAdd,
+      handleEdit,
+      handleSubmit,
+      handleDelete,
+      closeForm
     }
   }
 }
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.from-inline {
+  display: flex;
+  flex-wrap: wrap;
+  .ant-form-item {
+    // width: 50%;
+  }
+}
+</style>

@@ -9,7 +9,12 @@ module.exports = {
     components: 'components',
     tinymce: 'tinymce',
     permission: 'permission',
-    about: 'about'
+    about: 'about',
+    systemManage: 'systemManage',
+    organization: 'organization',
+    agendaManage: 'agendaManage',
+    agenda: 'agenda',
+    agendaGrid: 'agendaGrid',
   },
   // 头部菜单
   header_menu: {
