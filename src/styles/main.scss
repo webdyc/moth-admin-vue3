@@ -151,34 +151,3 @@
   overflow-y: hidden !important;
 }
 
-/* 滚动条样式 begin */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  width: 8px;
-  background: rgba(#101f1c, 0.1);
-  -webkit-border-radius: 2em;
-  -moz-border-radius: 2em;
-  border-radius: 2em;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: rgba(144, 147, 153, 0.5);
-  background-clip: padding-box;
-  min-height: 28px;
-  -webkit-border-radius: 2em;
-  -moz-border-radius: 2em;
-  border-radius: 2em;
-}
-// 鼠标放上去滚动条颜色
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(144, 147, 153, 0.8);
-}
-
-* {//Firefox浏览器滚动条样式
-  scrollbar-color: #e5e5e5 #f7f7f9; //滚动条轨道颜色、滚动条滑块的颜色
-  scrollbar-width: thin;     //thin模式下滚动条两端的三角按钮会消失
-}

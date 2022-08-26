@@ -3,7 +3,7 @@
   <a-layout id="layout-main" :class="collapsed ? 'hideSidebar' : 'openSidebar'">
     <!-- 侧边栏 -->
     <a-layout-sider
-      class="ant-pro-sider-fixed"
+      class="ant-pro-sider-fixed user-select"
       v-model:collapsed="collapsed"
       :trigger="null"
       collapsible
@@ -14,7 +14,7 @@
     <!-- 右侧内容区 -->
     <a-layout :class="{ hasTagsView: needTagsView }" class="main-container">
       <!-- 头部导航栏 -->
-      <a-layout-header class="fixed-header">
+      <a-layout-header class="fixed-header user-select">
         <Navbar />
         <tags-view v-if="needTagsView" />
       </a-layout-header>
