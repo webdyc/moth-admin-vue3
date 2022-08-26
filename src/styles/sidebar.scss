@@ -1,6 +1,48 @@
 #app {
+    .main-container {
+        min-height: 100%;
+        transition: margin-left .28s;
+        margin-left: $sideBarWidth;
+        position: relative;
+      }
+    .ant-pro-sider-fixed{
+        transition: width 0.28s;
+        width: $sideBarWidth !important;
+        // background-color: $menuBg;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        height: 100%;
+        .scrollbar-wrapper {
+          height: calc(100% - 50px);
+        }
+    }
+    .hideSidebar {
+        .sidebar-container {
+          width: $sideBaHideWidth !important;
+        }
     
-
-  
+        .main-container {
+          margin-left: $sideBaHideWidth;
+        }
+    
+        .submenu-title-noDropdown {
+          padding: 0 !important;
+          position: relative;
+    
+          .el-tooltip {
+            padding: 0 !important;
+    
+            .svg-icon {
+              margin-left: 20px;
+            }
+    
+            .sub-el-icon {
+              margin-left: 19px;
+            }
+          }
+        } 
+    }
 }
   

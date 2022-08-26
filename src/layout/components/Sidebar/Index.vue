@@ -3,36 +3,38 @@
   <!-- 菜单栏Logo -->
   <Logo />
   <!-- 菜单栏列表 -->
-  <a-menu
-    v-model:openKeys="openKeys"
-    v-model:selectedKeys="selectedKeys"
-    class="aside-menu"
-    mode="inline"
-    theme="dark"
-  >
-    <template v-for="item in permissionRoutes">
-      <template v-if="!item.hidden">
-        <!--这里是一级-->
-        <a-menu-item v-if="hasOnlyChildren(item)" :key="item.path">
-          <router-link :to="item.path">
-            <!-- <span class="anticon">
+  <div class="scrollbar-wrapper scroll-y">
+    <a-menu
+      v-model:openKeys="openKeys"
+      v-model:selectedKeys="selectedKeys"
+      class="aside-menu"
+      mode="inline"
+      theme="dark"
+    >
+      <template v-for="item in permissionRoutes">
+        <template v-if="!item.hidden">
+          <!--这里是一级-->
+          <a-menu-item v-if="hasOnlyChildren(item)" :key="item.path">
+            <router-link :to="item.path">
+              <!-- <span class="anticon">
               <svg-icon
                 :icon-name="item.meta && item.meta.icon"
                 class-name="aside-svg"
               />
             </span> -->
-            <span>
-              {{ item.meta && $t(`aside_menu.${item.meta.langTitle}`) }}</span
-            >
-          </router-link>
-        </a-menu-item>
-        <!--这里是子级-->
-        <template v-else>
-          <SidebarItem :key="item.path" :menu="item" :base-path="item.path" />
+              <span>
+                {{ item.meta && $t(`aside_menu.${item.meta.langTitle}`) }}</span
+              >
+            </router-link>
+          </a-menu-item>
+          <!--这里是子级-->
+          <template v-else>
+            <SidebarItem :key="item.path" :menu="item" :base-path="item.path" />
+          </template>
         </template>
       </template>
-    </template>
-  </a-menu>
+    </a-menu>
+  </div>
 </template>
 <script>
 import { computed, reactive, toRefs } from 'vue'

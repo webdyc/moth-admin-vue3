@@ -138,12 +138,13 @@ export default {
   display: flex;
   justify-content: space-between;
   padding: 0 16px;
-  height: 100%;
+  height: 50px;
+  line-height: 50px;
   .trigger {
     font-size: 20px;
     cursor: pointer;
     transition: color 0.3s;
-    margin-left: 16px;
+    // margin-left: 16px;
   }
   .trigger:hover {
     color: #1890ff;

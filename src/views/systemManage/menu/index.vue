@@ -11,6 +11,7 @@
     </div>
     <!-- 表格内容 -->
     <a-table
+      :scroll="{ x: 1500 }"
       :columns="tableColumns"
       :dataSource="tableData"
       :loading="tableLoading"
