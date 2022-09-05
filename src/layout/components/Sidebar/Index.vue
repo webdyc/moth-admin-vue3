@@ -3,7 +3,7 @@
   <!-- 菜单栏Logo -->
   <Logo />
   <!-- 菜单栏列表 -->
-  <div class="scrollbar-wrapper scroll-y">
+  <div class="scrollbar-wrapper">
     <a-menu
       v-model:openKeys="openKeys"
       v-model:selectedKeys="selectedKeys"
