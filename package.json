@@ -8,6 +8,10 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@fullcalendar/core": "^5.11.3",
+    "@fullcalendar/daygrid": "^5.11.3",
+    "@fullcalendar/interaction": "^5.11.3",
+    "@fullcalendar/resource-timegrid": "^5.11.3",
     "@tinymce/tinymce-vue": "^4.0.5",
     "ant-design-vue": "^3.2.11",
     "axios": "^0.24.0",
