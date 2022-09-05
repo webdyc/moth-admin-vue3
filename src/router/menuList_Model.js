@@ -21,7 +21,6 @@ export default [
     component: 'Layout',
     meta: {
       title: '首页',
-      langTitle: 'home',
       icon: 'dashboard',
       role: ['admin', 'addbtn1']
     },
@@ -41,7 +40,6 @@ export default [
   //   component: 'Layout',
   //   meta: {
   //     title: '权限管理',
-  //     langTitle: 'authority',
   //     icon: 'eye-open'
   //   },
   //   children: [
@@ -50,7 +48,6 @@ export default [
   //       name: 'Role',
   //       meta: {
   //         title: '角色管理',
-  //         langTitle: 'role'
   //       },
   //       component: '/authority/role/Index'
   //     },
@@ -59,7 +56,6 @@ export default [
   //       name: 'User',
   //       meta: {
   //         title: '用户管理',
-  //         langTitle: 'user'
   //       },
   //       component: '/authority/user/Index'
   //     },
@@ -68,7 +64,6 @@ export default [
   //       name: 'Menu',
   //       meta: {
   //         title: '菜单管理',
-  //         langTitle: 'menu'
   //       },
   //       component: '/authority/menu/Index'
   //     }
@@ -81,7 +76,6 @@ export default [
     component: 'Layout',
     meta: {
       title: '组件',
-      langTitle: 'components',
       icon: 'eye-open'
     },
     children: [
@@ -90,7 +84,6 @@ export default [
         name: 'Tinymce',
         meta: {
           title: '富文本编译器',
-          langTitle: 'tinymce'
         },
         component: '/components/tinymce/Index'
       },
@@ -99,7 +92,6 @@ export default [
         name: 'dragDalog',
         meta: {
           title: '可拖拽弹窗',
-          langTitle: 'dragDalog'
         },
         component: '/components/dragDalog/Index'
       }
@@ -113,7 +105,6 @@ export default [
     meta: {
       title: '日程管理',
       icon: 'eye-open',
-      langTitle: 'agendaManage'
     },
     children: [
       {
@@ -122,7 +113,6 @@ export default [
         component: '/agendaManage/agenda/index',
         meta: {
           title: "日程",
-          langTitle: 'agenda'
         },
       },
       {
@@ -131,7 +121,6 @@ export default [
         component: '/agendaManage/agendaGrid/index',
         meta: {
           title: "日程组",
-          langTitle: 'agendaGrid'
         },
       }
     ]
@@ -144,7 +133,6 @@ export default [
     meta: {
       title: '指令权限',
       icon: 'eye-open',
-      langTitle: 'permission'
     },
     children: [
       {
@@ -162,7 +150,6 @@ export default [
     meta: {
       title: "系统管理",
       icon: "eye-open",
-      langTitle: 'systemManage'
     },
     children: [
       {
@@ -171,7 +158,6 @@ export default [
         component: "/systemManage/organization/index",
         meta: {
           title: "组织管理",
-          langTitle: 'organization'
         },
       },
       {
@@ -180,7 +166,6 @@ export default [
         component: "/systemManage/user/index",
         meta: {
           title: "用户管理",
-          langTitle: 'user'
         },
       },
       {
@@ -189,7 +174,6 @@ export default [
         component: "/systemManage/role/index",
         meta: {
           title: "角色管理",
-          langTitle: 'role'
         },
       },
       {
@@ -198,7 +182,6 @@ export default [
         component: "/systemManage/menu/index",
         meta: {
           title: "菜单管理",
-          langTitle: 'menu'
         },
       },
     ],
@@ -210,7 +193,6 @@ export default [
     meta: {
       icon: 'link',
       title: '关于',
-      langTitle: 'about'
     },
     children: [
       {

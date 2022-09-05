@@ -45,29 +45,6 @@
           </a-menu>
         </template>
       </a-dropdown>
-      <!-- 国际化 -->
-      <a-dropdown class="right-menu-item" :trigger="['click']">
-        <div class="avatar-wrapper cursor-pointer">
-          <svg-icon :icon-name="'international'" class-name="navbar-svg" />
-        </div>
-        <!-- 用户信息弹出框 -->
-        <template #overlay>
-          <a-menu class="right-menu-item-lang">
-            <a-menu-item
-              v-for="(item, index) in lang"
-              :key="index"
-              @click="toggleLang(item.value)"
-            >
-              <div class="align-center flex">
-                <svg-icon :icon-name="item.name" class-name="language-svg" />
-                <div :class="{ current: lang_current == item.value }">
-                  {{ item.label }}
-                </div>
-              </div>
-            </a-menu-item>
-          </a-menu>
-        </template>
-      </a-dropdown>
     </div>
   </div>
 </template>
@@ -80,8 +57,6 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined
 } from '@ant-design/icons-vue'
-// 语言
-import { useI18n } from 'vue-i18n'
 
 export default {
   name: 'Navbar',
@@ -92,8 +67,6 @@ export default {
     MenuUnfoldOutlined
   },
   setup() {
-    // 扩展语言
-    const { locale } = useI18n({ useScope: 'global' })
     const store = useStore()
     const state = reactive({
       ...store.state.user.info,
@@ -111,12 +84,6 @@ export default {
     const toggleSideBar = async () => {
       store.dispatch('app/toggleSideBar')
     }
-    // 设置语言
-    const toggleLang = (lang) => {
-      store.dispatch('settings/changeSetting', { key: 'language', value: lang })
-      locale.value = lang
-      state.lang_current = lang
-    }
     // 登出
     const logout = async () => {
       await store.dispatch('user/logout')
@@ -127,7 +94,6 @@ export default {
       ...toRefs(state),
       collapsed,
       toggleSideBar,
-      toggleLang,
       logout
     }
   }

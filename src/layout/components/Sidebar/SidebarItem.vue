@@ -7,7 +7,7 @@
           class-name="aside-svg"
         />
       </span>
-      <span>{{ menu.meta && $t(`aside_menu.${menu.meta.langTitle}`) }}</span>
+      <span>{{ menu.meta && menu.meta.title }}</span>
     </template>
     <template v-if="menu.children && menu.children.length">
       <template v-for="item in menu.children">
@@ -15,7 +15,7 @@
           <!-- 不存在子级的栏目 -->
           <a-menu-item v-if="!item.children" :key="resolvePath(item.path)">
             <router-link :to="resolvePath(item.path)">{{
-              item.meta && $t(`aside_menu.${item.meta.langTitle}`)
+              item.meta && item.meta.title
             }}</router-link>
           </a-menu-item>
           <!-- 存在子级栏目 -->

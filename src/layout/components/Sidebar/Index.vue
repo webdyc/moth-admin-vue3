@@ -22,9 +22,7 @@
                 class-name="aside-svg"
               />
             </span> -->
-              <span>
-                {{ item.meta && $t(`aside_menu.${item.meta.langTitle}`) }}</span
-              >
+              <span> {{ item.meta && item.meta.title }}</span>
             </router-link>
           </a-menu-item>
           <!--这里是子级-->
